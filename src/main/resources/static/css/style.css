@@ -121,3 +121,19 @@ button:hover {
   text-decoration: underline;
   color: #a8a8a8;
 }
+
+.index {
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 3rem;
+  transition: all 0.5s ease-in-out;
+  min-height: 100vh;
+  background-image: url(https://user-images.githubusercontent.com/13468728/233847739-219cb494-c265-4554-820a-bd3424c59065.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  backdrop-filter: blur(55px);
+  max-width: 800px;
+  margin: auto;
+}

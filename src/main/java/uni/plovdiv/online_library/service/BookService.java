@@ -56,5 +56,9 @@ public class BookService {
         book.setAvailableCopies(book.getAvailableCopies() + 1);
         return bookRepository.save(book);
     }
+
+    public Book getBook(Long id) {
+        return bookRepository.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
+    }
 }
 

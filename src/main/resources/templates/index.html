@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Online Library</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
-<body>
+<body class="index">
+
     <h1>Welcome to the Online Library</h1>
 
     <!-- Search for Books Section -->
@@ -12,10 +16,51 @@
     <form action="/user/books/search" method="GET">
         <label for="searchQuery">Title/Author/Genre:</label>
         <input type="text" id="searchQuery" name="query">
-            
+
         <button type="submit">Search</button>
     </form>
 
+    <h2>Your currently borrowed books</h2>
+    <div id="borrowed-books-container">
+        <!-- The borrowed books will be dynamically inserted here by JavaScript -->
+    </div>
+<!--    refactor-->
+    <script>
+        // Fetch borrowed books from the backend using AJAX
+        function fetchBorrowedBooks() {
+            $.ajax({
+                url: '/user/books/getAllBorrowed', // The endpoint for fetching borrowed books
+                method: 'GET',
+                dataType: 'json',
+                success: function(books) {
+                    console.log("success")
+                    // Clear the container before adding new content
+                    $('#borrowed-books-container').empty();
+
+                    // Loop through the books and append each one to the container
+                    books.forEach(function(book) {
+                        $('#borrowed-books-container').append(`
+                            <div class="borrowed-book">
+                                <h3>Title: ${book.title}</h3>
+                                <h4>Author: ${book.author}</h4>
+                                <p>Taken at: ${book.takenAt}</p>
+                                <p>Returned: ${book.returned}</p>
+                                <p>Book ID (Used for returns): ${book.id}</p>
+                            </div>
+                        `);
+                    });
+                },
+                error: function(error) {
+                    console.log("Error fetching borrowed books:", error);
+                }
+            });
+        }
+
+        // Call the function to fetch the books when the page loads
+        $(document).ready(function() {
+            fetchBorrowedBooks();
+        });
+    </script>
     <h2>Borrow a Book</h2>
     <form id="borrowBookForm" action="/user/books/borrow/{bookId}" method="POST">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
@@ -49,7 +94,7 @@
     <script>
         const form2 = document.getElementById('returnBookForm');
         const bookIdInput2 = document.getElementById('returnBookId');
-        
+
         form2.addEventListener('submit', function(event) {
             const bookId = bookIdInput2.value;
             if (!bookId) {
