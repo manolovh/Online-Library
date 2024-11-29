@@ -1,0 +1,41 @@
+#paginationControls {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    padding: 0;
+}
+
+/* Pagination link button style */
+.paginationLink {
+    height: 40px;
+    border-radius: 40px;
+    font-size: 1rem;
+    font-weight: 400;
+    transition: all 0.4s ease;
+    display: inline-flex;
+    align-items: center;
+    margin: 0 10px;
+    padding: 8px 16px;
+    background-color: rgba(53, 47, 124, 0.4);  /* Darker blue on hover */
+    color: white;  /* White text color */
+    text-decoration: none;
+    cursor: pointer;  /* Change cursor to pointer on hover */
+}
+
+/* Pagination link hover effect */
+.paginationLink:hover {
+    background-color: rgba(53, 47, 124, 0.7);  /* Darker blue on hover */
+    color: white;  /* Keep text color white */
+}
+
+/* Pagination link active state (when clicked) */
+.paginationLink:active {
+    background-color: rgba(53, 47, 124, 0.9);  /* Darker blue on hover */
+    color: white;
+}
+
+/* Icon styling */
+.paginationLink i {
+    margin: 0 5px;  /* Add space between the icon and text */
+    font-size: 18px;  /* Slightly larger icon size */
+}

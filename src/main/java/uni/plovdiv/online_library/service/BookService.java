@@ -1,11 +1,12 @@
 package uni.plovdiv.online_library.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import uni.plovdiv.online_library.jpa.BookRepository;
 import uni.plovdiv.online_library.model.Book;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,8 +39,8 @@ public class BookService {
         bookRepository.deleteById(id);
     }
 
-    public List<Book> searchBooks(String query) {
-        return bookRepository.findByTitleContainingOrAuthorContainingOrGenreContaining(query, query, query);
+    public Page<Book> searchBooks(String query, Pageable pageable) {
+        return bookRepository.searchByQuery(query, pageable);
     }
 
     public Book borrowBook(Long id) {

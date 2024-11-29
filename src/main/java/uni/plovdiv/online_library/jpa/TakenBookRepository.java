@@ -13,6 +13,6 @@ public interface TakenBookRepository extends JpaRepository<TakenBook, Long> {
     @Query("SELECT t FROM TakenBook t WHERE t.takenFrom = :takenFrom AND t.bookId = :bookId AND t.returned = false")
     Optional<TakenBook> findByTakenFromAndBookIdAndReturnedFalse(String takenFrom, Long bookId);
 
-    @Query("SELECT t FROM TakenBook t WHERE t.takenFrom = :takenFrom")
-    List<TakenBook> findAllTakenByTakenFrom(@Param("takenFrom") String takenFrom);
+    @Query("SELECT t FROM TakenBook t WHERE t.takenFrom = :takenFrom and t.returned = false")
+    List<TakenBook> findAllTakenByTakenFromAndReturnedFalse(@Param("takenFrom") String takenFrom);
 }

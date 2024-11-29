@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Date;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,7 +36,7 @@ public class UserController {
     public List<EnrichedTakenBookDto> getAllBorrowed() {
         //refactor
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<TakenBook> takenBooks = takenBookRepository.findAllTakenByTakenFrom(username);
+        List<TakenBook> takenBooks = takenBookRepository.findAllTakenByTakenFromAndReturnedFalse(username);
         List<EnrichedTakenBookDto> bookDtos = new ArrayList<>();
 
         for (TakenBook tb: takenBooks) {
@@ -50,8 +52,13 @@ public class UserController {
         return bookDtos;
     }
     @GetMapping("/search")
-    public List<Book> searchBooks(@RequestParam String query) {
-        return bookService.searchBooks(query);
+    public Page<Book> searchBooks(@RequestParam(name="query") String query,
+                                  @RequestParam(name = "page", defaultValue = "0") int page,
+                                  @RequestParam(name = "size", defaultValue = "10") int size, Model model) {
+        Page<Book> booksPage = bookService.searchBooks(query, PageRequest.of(page, size));
+        model.addAttribute("booksPage", booksPage);  // Add paginated result
+        model.addAttribute("query", query);          // Add query to keep it in the form input
+        return booksPage;
     }
 
     @PostMapping("/borrow/{id}")
@@ -69,12 +76,18 @@ public class UserController {
         return "Book sucessfully borrowed!";
     }
 
+    @GetMapping("/borrow/{id}/check")
+    public Boolean isEligibleForBorrow(@PathVariable Long id) {
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return takenBookRepository.findByTakenFromAndBookIdAndReturnedFalse(username, id).isEmpty();
+    }
+
     @PostMapping("/return/{id}")
     public String returnBook(@PathVariable Long id) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        Optional<TakenBook> takenBookOptional = takenBookRepository.findByTakenFromAndBookIdAndReturnedFalse(user.getUsername(), id);
-        if (!takenBookOptional.isPresent()) {
+        Optional<TakenBook> takenBookOptional = takenBookRepository.findByTakenFromAndBookIdAndReturnedFalse(username, id);
+        if (takenBookOptional.isEmpty()) {
             return "You don't have to return this book!";
         }
 
