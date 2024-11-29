@@ -43,6 +43,12 @@ public class AuthenticationController {
         return "index";
     }
 
+    @GetMapping("/admin-panel")
+    public String showAdminPanel() {
+        return "adminPanel";
+    }
+
+
     @GetMapping("/login")
     public String showLoginPage() {
         return "login";

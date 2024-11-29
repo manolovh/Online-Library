@@ -50,7 +50,7 @@ export function isEligibleForBorrowing(bookId) {
             'Content-Type': 'application/json'
         }
     })
-        .then(response => response.json()) // Assuming the backend returns a boolean
+        .then(response => response.json())
         .catch(error => {
             console.error('Error checking if book is borrowed:', error);
             return false; // Default to false in case of an error
