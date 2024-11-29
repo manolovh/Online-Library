@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/css/form.css">
     <script src="/js/register.js" defer></script>
 </head>
-<body>
+<body class="auth">
   <section>
     <form action="/register" method="post">
       <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>

@@ -17,3 +17,26 @@ body {
   background-position: center;
   background-size: cover;
 }
+
+.defaultPage {
+  flex-direction: column;
+  gap: 3rem;
+  justify-content: center;
+  align-items: center;
+  padding: 5rem 3rem 2rem 3rem;
+  transition: all 0.5s ease-in-out;
+  min-height: 100vh;
+  background-image: url(https://user-images.githubusercontent.com/13468728/233847739-219cb494-c265-4554-820a-bd3424c59065.jpg);
+  background-repeat: repeat-y;
+  background-position: center top;
+  background-size: 100% auto;
+  backdrop-filter: blur(55px);
+  max-width: 100%;
+  margin: auto;
+}
+
+h1 {
+  font-size: 2rem;
+  color: #fff;
+  text-align: center;
+}
