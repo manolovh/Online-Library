@@ -1,21 +1,25 @@
 package uni.plovdiv.online_library.service;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
+import uni.plovdiv.online_library.dto.PopularBookDto;
 import uni.plovdiv.online_library.jpa.BookRepository;
+import uni.plovdiv.online_library.jpa.TakenBookRepository;
 import uni.plovdiv.online_library.model.Book;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class BookService {
     private final BookRepository bookRepository;
-
-    public BookService(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
+    private final TakenBookRepository takenBookRepository;
 
     public Book addBook(Book book) {
         return bookRepository.save(book);
@@ -61,5 +65,23 @@ public class BookService {
     public Book getBook(Long id) {
         return bookRepository.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
     }
-}
 
+    public List<PopularBookDto> getPopularBooks() {
+        Pageable pageable = PageRequest.of(0, 10);
+        List<Object[]> top10Books = takenBookRepository.findTop10MostFrequentBooks(pageable);
+
+        List<PopularBookDto> popularBooks = new ArrayList<>();
+        for (Object[] details: top10Books) {
+            Long bookId = (Long) details[0];
+            Optional<Book> optionalBook = bookRepository.findById(bookId);
+
+            if (optionalBook.isPresent()) {
+                Book book = optionalBook.get();
+                PopularBookDto popularBook = new PopularBookDto(book.getTitle(), book.getAuthor(), (Long) details[1]);
+                popularBooks.add(popularBook);
+            }
+        }
+
+        return popularBooks;
+    }
+}

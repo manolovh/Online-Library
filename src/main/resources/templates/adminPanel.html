@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Online Library</title>
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/nav.css">
     <link rel="stylesheet" href="/css/form.css">
@@ -11,25 +11,135 @@
     <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
     <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
     <script type="module" src="/js/user/index/main.js"></script>
+    <style>
+      body {
+          font-family: 'Poppins', sans-serif;
+          color: white;
+          background-color: #353070;
+          padding: 20px;
+      }
+
+      .admin-nav {
+          display: flex;
+          gap: 15px;
+          margin-bottom: 20px;
+      }
+
+      .admin-button {
+          padding: 10px 20px;
+          background-color: rgba(53, 47, 124, 0.8);
+          color: white;
+          border: none;
+          cursor: pointer;
+          border-radius: 10px;
+          transition: background-color 0.3s ease;
+          height: 60px;
+      }
+
+      .admin-button:hover {
+          background-color: rgba(53, 47, 124, 0.6);
+      }
+
+      .admin-section {
+          display: none; /* Hide all sections initially */
+      }
+
+      .active {
+          display: block; /* Show active section */
+      }
+
+      .section-content {
+          display: none;
+          margin-top: 20px;
+          padding: 20px;
+          background-color: rgba(53, 47, 124, 0.8);
+          border-radius: 10px;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      th {
+          text-align: center;
+          vertical-align: middle;
+          padding: 10px;
+      }
+  </style>
 </head>
 <body class="defaultPage">
-<nav>
-    <nav>
-        <ul>
-            <li>
-                <form action="/logout" method="post">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                    <button type="submit">Logout</button>
-                </form>
-            </li>
-        </ul>
-    </nav>
+  <nav>
+      <nav>
+          <ul>
+              <li>
+                  <form action="/logout" method="post">
+                      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                      <button type="submit">Logout</button>
+                  </form>
+              </li>
+          </ul>
+      </nav>
+  </nav>
 
-</nav>
-<h1>Welcome to the Online Library</h1>
+  <h1>Admin Dashboard</h1>
 
+  <div class="admin-nav">
+      <button class="admin-button" onclick="showSection('addBook')">Add Book</button>
+      <button id="viewStatitics" class="admin-button" onclick="showSection('viewStats')">Popular Books</button>
+      <button class="admin-button" onclick="showSection('viewUsers')">View Users</button>
+  </div>
 
-<!-- Display any messages -->
-<p th:text="${message}"></p>
-</body>
+  <div id="addBook" class="section-content">
+    <h2>Add a New Book</h2>
+    <form id="addBookForm">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required>
+        <label for="author">Author:</label>
+        <input type="text" id="author" name="author" required>
+        <label for="isbn">Genre:</label>
+        <input type="text" id="genre" name="genre" required>
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity" required>
+        <label for="year">Publish Year:</label>
+        <input type="number" id="year" name="year" required>
+        <button type="submit" id="addBtn">Add Book</button>
+    </form>
+  </div>
+
+  <div id="viewStats" class="section-content">
+      <table id="booksTable">
+        <thead>
+        <tr>
+            <th>Book Name</th>
+            <th>Author</th>
+            <th>Times Taken</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- The rows will be added dynamically by JavaScript -->
+        </tbody>
+      </table>
+  </div>
+
+  <div id="viewUsers" class="section-content">
+      <h2>View Users</h2>
+  </div>
+
+  <div id="emptyResponse" style="display:none;">
+      <p>No matches found for your search criteria</p>
+  </div>
+
+  <script>
+      function showSection(sectionId) {
+          const sections = document.querySelectorAll('.section-content');
+          sections.forEach(section => {
+              section.style.display = 'none';
+          });
+
+          const selectedSection = document.getElementById(sectionId);
+          if (selectedSection) {
+              selectedSection.style.display = 'block';
+          }
+      }
+  </script>
+  
+  </body>
 </html>

@@ -56,8 +56,8 @@ public class UserController {
                                   @RequestParam(name = "page", defaultValue = "0") int page,
                                   @RequestParam(name = "size", defaultValue = "10") int size, Model model) {
         Page<Book> booksPage = bookService.searchBooks(query, PageRequest.of(page, size));
-        model.addAttribute("booksPage", booksPage);  // Add paginated result
-        model.addAttribute("query", query);          // Add query to keep it in the form input
+        model.addAttribute("booksPage", booksPage);
+        model.addAttribute("query", query);
         return booksPage;
     }
 
