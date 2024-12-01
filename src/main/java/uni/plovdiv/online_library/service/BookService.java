@@ -7,10 +7,15 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import uni.plovdiv.online_library.dto.PopularBookDto;
+import uni.plovdiv.online_library.dto.TakenBookInfo;
 import uni.plovdiv.online_library.jpa.BookRepository;
 import uni.plovdiv.online_library.jpa.TakenBookRepository;
 import uni.plovdiv.online_library.model.Book;
+import uni.plovdiv.online_library.model.TakenBook;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -83,5 +88,29 @@ public class BookService {
         }
 
         return popularBooks;
+    }
+
+    public List<TakenBookInfo> getTakenBooks() {
+        List<TakenBook> takenBooks = takenBookRepository.findAllByReturnedFalse();
+
+        List<TakenBookInfo> takenBookInfos = new ArrayList<>();
+        for (TakenBook takenBook: takenBooks) {
+            Optional<Book> optionalBook = bookRepository.findById(takenBook.getBookId());
+            
+            if (optionalBook.isPresent()) {
+                Book book = optionalBook.get();
+                LocalDate savedDate = takenBook.getTakenAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                int daysRemaining = (int) ChronoUnit.DAYS.between(savedDate, LocalDate.now());
+
+                TakenBookInfo takenBookInfo = new TakenBookInfo(
+                    book.getTitle(), book.getAuthor(), takenBook.getTakenFrom(), Integer.toString(30 - daysRemaining));
+                takenBookInfos.add(takenBookInfo);
+            }
+        }
+        return takenBookInfos;
+    }
+
+    public Page<Book> getBooks(Pageable pageable) {
+        return bookRepository.retrieveBooks(pageable);
     }
 }

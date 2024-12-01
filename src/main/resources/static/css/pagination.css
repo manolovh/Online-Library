@@ -6,7 +6,8 @@
 }
 
 /* Pagination link button style */
-.paginationLink {
+.paginationLink,
+.paginationLinkAdmin {
     height: 40px;
     border-radius: 40px;
     font-size: 1rem;
@@ -23,19 +24,22 @@
 }
 
 /* Pagination link hover effect */
-.paginationLink:hover {
+.paginationLink:hover,
+.paginationLinkAdmin:hover {
     background-color: rgba(53, 47, 124, 0.7);  /* Darker blue on hover */
     color: white;  /* Keep text color white */
 }
 
 /* Pagination link active state (when clicked) */
-.paginationLink:active {
+.paginationLink:active,
+.paginationLinkAdmin:active {
     background-color: rgba(53, 47, 124, 0.9);  /* Darker blue on hover */
     color: white;
 }
 
 /* Icon styling */
-.paginationLink i {
+.paginationLink i,
+.paginationLinkAdmin i {
     margin: 0 5px;  /* Add space between the icon and text */
     font-size: 18px;  /* Slightly larger icon size */
 }

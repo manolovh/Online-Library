@@ -7,8 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PopularBookDto {
-    private String bookName;
-    private String authorName;
-    private Long takenCount;
+public class UserStatusesDto {
+    private Long active;
+    private Long inactive;
 }

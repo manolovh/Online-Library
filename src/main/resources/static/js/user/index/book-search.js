@@ -25,13 +25,12 @@ function handleBookSearchResponse(response) {
     setupPagination(response.number, response.totalPages);
 }
 
-// Display books in the table
 function displayBooks(books) {
     $('#emptyResponse').hide();
     $('#booksTableContainer').show();
 
     const tbody = $('#booksTable tbody');
-    tbody.empty(); // Clear existing rows
+    tbody.empty();
 
     books.forEach(book => {
         if (book.availableCopies > 0) {
@@ -43,7 +42,6 @@ function displayBooks(books) {
     attachBorrowEventHandlers();
 }
 
-// Create a table row for a book
 function createBookRow(book) {
     return `
         <tr>
@@ -56,32 +54,29 @@ function createBookRow(book) {
     `;
 }
 
-// Attach click event handlers to borrow buttons
 function attachBorrowEventHandlers() {
     const borrowButtons = document.querySelectorAll('.button-borrow');
     borrowButtons.forEach(button => {
         const bookId = button.getAttribute('data-book-id');
 
-        // Check if the book is already borrowed
         isEligibleForBorrowing(bookId).then(isEligible => {
             if (isEligible) {
-                button.textContent = 'Borrow'; // Change button to "Return" if borrowed
-                button.classList.add('borrow-button'); // Optional: Add specific class for styling
+                button.textContent = 'Borrow';
+                button.classList.add('borrow-button');
             } else {
-                button.textContent = 'Return'; // Default to "Borrow"
-                button.classList.remove('borrow-button'); // Optional: Remove return class if it exists
+                button.textContent = 'Return';
+                button.classList.remove('borrow-button');
             }
 
-            // Attach click event based on the current state
             button.addEventListener('click', () => {
                 if (button.textContent === 'Borrow') {
                     borrowBook(bookId).then(() => {
-                        button.textContent = 'Return'; // Change to "Return" after successful borrow
+                        button.textContent = 'Return';
                         button.classList.add('button-return');
                     });
                 } else if (button.textContent === 'Return') {
                     returnBook(bookId).then(() => {
-                        button.textContent = 'Borrow'; // Change to "Borrow" after successful return
+                        button.textContent = 'Borrow';
                         button.classList.remove('button-return');
                     });
                 }
@@ -90,7 +85,6 @@ function attachBorrowEventHandlers() {
     });
 }
 
-// Set up pagination controls
 function setupPagination(currentPage, totalPages) {
     const paginationControls = $('#paginationControls');
     paginationControls.empty();
@@ -104,7 +98,6 @@ function setupPagination(currentPage, totalPages) {
     }
 }
 
-// Create a pagination link
 function createPaginationLink(page, text, iconHtml) {
     return `
         <a href="#" class="paginationLink" data-page="${page}">
@@ -113,7 +106,6 @@ function createPaginationLink(page, text, iconHtml) {
     `;
 }
 
-// Show the empty response message
 function showEmptyResponse() {
     $('#booksTableContainer').hide();
     $('#emptyResponse').show();
@@ -128,7 +120,7 @@ export function fetchBorrowedBooks() {
         .then(response => response.json())
         .then(books => {
             const container = document.getElementById('borrowed-books-container');
-            container.innerHTML = ''; // Clear the container before appending new data
+            container.innerHTML = '';
 
             books.forEach(book => {
                 const bookCard = document.createElement('div');
@@ -143,7 +135,6 @@ export function fetchBorrowedBooks() {
                 container.appendChild(bookCard);
             });
 
-            // Attach event listeners to the return buttons
             const returnButtons = document.querySelectorAll('.button-return');
             returnButtons.forEach(button => {
                 button.addEventListener('click', () => {

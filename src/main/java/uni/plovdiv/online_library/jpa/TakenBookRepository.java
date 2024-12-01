@@ -23,4 +23,8 @@ public interface TakenBookRepository extends JpaRepository<TakenBook, Long> {
         "GROUP BY tb.bookId " +
         "ORDER BY borrowCount DESC")
     List<Object[]> findTop10MostFrequentBooks(Pageable pageable);
+
+    List<TakenBook> findAllByReturnedFalse();
+
+    void deleteAllByBookId(Long bookId);
 }

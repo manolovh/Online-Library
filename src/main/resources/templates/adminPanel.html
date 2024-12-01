@@ -6,62 +6,14 @@
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/nav.css">
     <link rel="stylesheet" href="/css/form.css">
+    <link rel="stylesheet" href="/css/pagination.css">
+    <link rel="stylesheet" href="/css/table.css">
+    <link rel="stylesheet" href="/css/admin.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
     <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
     <script type="module" src="/js/user/index/main.js"></script>
-    <style>
-      body {
-          font-family: 'Poppins', sans-serif;
-          color: white;
-          background-color: #353070;
-          padding: 20px;
-      }
-
-      .admin-nav {
-          display: flex;
-          gap: 15px;
-          margin-bottom: 20px;
-      }
-
-      .admin-button {
-          padding: 10px 20px;
-          background-color: rgba(53, 47, 124, 0.8);
-          color: white;
-          border: none;
-          cursor: pointer;
-          border-radius: 10px;
-          transition: background-color 0.3s ease;
-          height: 60px;
-      }
-
-      .admin-button:hover {
-          background-color: rgba(53, 47, 124, 0.6);
-      }
-
-      .admin-section {
-          display: none; /* Hide all sections initially */
-      }
-
-      .active {
-          display: block; /* Show active section */
-      }
-
-      .section-content {
-          display: none;
-          margin-top: 20px;
-          padding: 20px;
-          background-color: rgba(53, 47, 124, 0.8);
-          border-radius: 10px;
-          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      }
-      th {
-          text-align: center;
-          vertical-align: middle;
-          padding: 10px;
-      }
-  </style>
 </head>
 <body class="defaultPage">
   <nav>
@@ -81,8 +33,10 @@
 
   <div class="admin-nav">
       <button class="admin-button" onclick="showSection('addBook')">Add Book</button>
-      <button id="viewStatitics" class="admin-button" onclick="showSection('viewStats')">Popular Books</button>
-      <button class="admin-button" onclick="showSection('viewUsers')">View Users</button>
+      <button class="admin-button" id="viewStatistics"  onclick="showSection('popularBooks')">View Popular Books</button>
+      <button class="admin-button" id="viewUserStatus" onclick="showSection('viewUserCount')">View User Count</button>
+      <button class="admin-button" id="manage" onclick="showSection('manageBooks')">Manage Books</button>
+      <button class="admin-button" id="taken" onclick="showSection('takenBooks')">View Taken Books</button>
   </div>
 
   <div id="addBook" class="section-content">
@@ -104,7 +58,7 @@
     </form>
   </div>
 
-  <div id="viewStats" class="section-content">
+  <div id="popularBooks" class="section-content">
       <table id="booksTable">
         <thead>
         <tr>
@@ -114,13 +68,52 @@
         </tr>
         </thead>
         <tbody>
-        <!-- The rows will be added dynamically by JavaScript -->
+          <!-- Rows will be added dynamically -->
         </tbody>
       </table>
   </div>
 
-  <div id="viewUsers" class="section-content">
-      <h2>View Users</h2>
+  <div id="viewUserCount" class="section-content">
+      <h2>User Summary</h2>
+      <div class="user-count" id="totalUsers">Total Users: 0</div>
+      <div class="user-count active" id="activeUsers">Active Users: 0</div>
+      <div class="user-count inactive" id="inactiveUsers">Inactive Users: 0</div>
+  </div>
+
+  <div id="manageBooks" class="section-content">
+      <table id="managedBooksTable">
+          <thead>
+          <tr>
+              <th>Book Name</th>
+              <th>Author</th>
+              <th>Published Year</th>
+              <th>Available Copies</th>
+          </tr>
+          </thead>
+          <tbody>
+            <!-- Rows will be added dynamically -->
+          </tbody>
+      </table>
+
+      <div id="paginationControls">
+          <!-- Pagination links will be added dynamically -->
+      </div>
+  </div>
+
+  <div id="takenBooks" class="section-content">
+      <table id="booksTable">
+        <thead>
+        <tr>
+            <th>Book Name</th>
+            <th>Author</th>
+            <th>Taken From</th>
+            <th>Days Remaining</th>
+        </tr>
+        </thead>
+        <tbody>
+          <!-- Rows will be added dynamically -->
+        </tbody>
+      </table>
   </div>
 
   <div id="emptyResponse" style="display:none;">

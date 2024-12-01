@@ -1,0 +1,71 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    background-color: #353070;
+    padding: 20px;
+}
+
+.admin-nav {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.admin-button {
+    padding: 10px 20px;
+    background-color: rgba(53, 47, 124, 0.8);
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+    height: 60px;
+}
+
+.admin-button:hover {
+    background-color: rgba(53, 47, 124, 0.6);
+}
+
+.admin-section {
+    display: none; /* Hide all sections initially */
+}
+
+.active {
+    display: block; /* Show active section */
+}
+
+.section-content {
+    display: none;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: rgba(53, 47, 124, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+th {
+    text-align: center;
+    vertical-align: middle;
+    padding: 10px;
+}
+
+#addBookForm label, 
+#addBookForm input, 
+#addBookForm button {
+    display: block;
+    margin-bottom: 10px;
+}
+
+#addBookForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#addBookForm div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+}

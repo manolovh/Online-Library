@@ -51,6 +51,7 @@ public class UserController {
         }
         return bookDtos;
     }
+
     @GetMapping("/search")
     public Page<Book> searchBooks(@RequestParam(name="query") String query,
                                   @RequestParam(name = "page", defaultValue = "0") int page,

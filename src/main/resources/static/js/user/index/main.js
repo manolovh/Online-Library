@@ -1,5 +1,5 @@
 import { fetchBooks } from './book-search.js';
-import { fetchMostPopularBooks, handleAddBook } from './admin-ops.js';
+import { fetchMostPopularBooks, handleAddBook, fetchUserStatus, fetchAdminBooks, fetchTakenBooks } from './admin-ops.js';
 import { fetchBorrowedBooks } from './book-search.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -18,8 +18,27 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchBooks(query, page);
     });
 
-    $('#viewStatitics').click(function () {
+    $(document).on('click', '.paginationLinkAdmin', function (e) {
+      e.preventDefault();
+      const page = $(this).data('page');
+      fetchAdminBooks(page);
+    });
+
+    $('#viewStatistics').click(function () {
         fetchMostPopularBooks();
+    });
+
+    $('#viewUserStatus').click(function () {
+        fetchUserStatus();
+    });
+
+    $('#manage').click(function () {
+      currentPage = 0;
+      fetchAdminBooks(currentPage);
+    });
+
+    $('#taken').click(function () {
+      fetchTakenBooks();
     });
 
     $('#addBtn').click(function () {
