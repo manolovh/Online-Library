@@ -13,7 +13,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
     <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <script type="module" src="/js/user/index/main.js"></script>
+    <script type="module" src="/js/user/index/adminMain.js"></script>
 </head>
 <body class="defaultPage">
   <nav>
@@ -48,7 +48,7 @@
         <input type="text" id="title" name="title" required>
         <label for="author">Author:</label>
         <input type="text" id="author" name="author" required>
-        <label for="isbn">Genre:</label>
+        <label for="genre">Genre:</label>
         <input type="text" id="genre" name="genre" required>
         <label for="quantity">Quantity:</label>
         <input type="number" id="quantity" name="quantity" required>
@@ -87,7 +87,9 @@
               <th>Book Name</th>
               <th>Author</th>
               <th>Published Year</th>
+              <th>Genre</th>
               <th>Available Copies</th>
+              <th>Actions</th>
           </tr>
           </thead>
           <tbody>
@@ -97,6 +99,35 @@
 
       <div id="paginationControls">
           <!-- Pagination links will be added dynamically -->
+      </div>
+
+      <div id="editModal" class="modal">
+          <div class="modal-content">
+              <h2>Edit Book</h2>
+              <form id="editBookForm">
+                  <label for="bookTitle">Title:</label>
+                  <input type="text" id="bookTitle" name="bookTitle" required>
+
+                  <label for="bookAuthor">Author:</label>
+                  <input type="text" id="bookAuthor" name="bookAuthor" required>
+
+                  <label for="bookGenre">Genre:</label>
+                  <input type="text" id="bookGenre" name="bookGenre" required>
+
+                  <label for="bookYear">Year:</label>
+                  <input type="number" id="bookYear" name="bookYear" min="0" required>
+
+                  <label for="bookAvailableCopies">Available Copies:</label>
+                  <input type="number" id="bookAvailableCopies" name="bookAvailableCopies" min="0" required>
+
+                  <input type="hidden" id="bookId" name="bookId">
+
+                  <div class="formButtons">
+                      <button type="submit">Save</button>
+                      <button type="button" id="closeModalButton">Close</button>
+                  </div>
+              </form>
+          </div>
       </div>
   </div>
 

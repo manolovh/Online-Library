@@ -20,7 +20,6 @@ import lombok.AllArgsConstructor;
 import uni.plovdiv.online_library.dto.PopularBookDto;
 import uni.plovdiv.online_library.dto.TakenBookInfo;
 import uni.plovdiv.online_library.dto.UserStatusesDto;
-import uni.plovdiv.online_library.jpa.TakenBookRepository;
 import uni.plovdiv.online_library.model.Book;
 import uni.plovdiv.online_library.service.BookService;
 import uni.plovdiv.online_library.service.UserService;
@@ -32,7 +31,6 @@ import uni.plovdiv.online_library.service.UserService;
 public class AdminController {
     private final BookService bookService;
     private final UserService userService;
-    private final TakenBookRepository takenBookRepository;
 
     @PostMapping("/books/add")
     public Book addBook(@RequestBody Book book) {
@@ -46,7 +44,6 @@ public class AdminController {
 
     @DeleteMapping("/books/{id}")
     public void deleteBook(@PathVariable Long id) {
-        takenBookRepository.deleteAllByBookId(id);
         bookService.deleteBook(id);
     }
 
@@ -74,5 +71,10 @@ public class AdminController {
         Page<Book> booksPage = bookService.getBooks(PageRequest.of(page, size));
         model.addAttribute("booksPage", booksPage);
         return booksPage;
+    }
+
+    @GetMapping("/books/{id}")
+    public Book getBook(@PathVariable Long id) {
+        return bookService.getBook(id);
     }
 }

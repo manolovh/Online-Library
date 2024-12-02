@@ -69,3 +69,40 @@ th {
     align-items: center;
     margin-bottom: 10px;
 }
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: rgba(43, 39, 110);
+    margin: 15% auto;
+    padding: 4rem;
+    border: 1px solid #888;
+    width: 20%;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form label, form input, form button {
+    margin: 10px 0;
+}
+
+.formButtons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

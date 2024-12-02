@@ -1,5 +1,14 @@
 import {getCsrfToken} from "../../utils/csrf.js";
 
+const editModal = document.getElementById("editModal");
+const editForm = document.getElementById("editBookForm");
+const bookTitleInput = document.getElementById("bookTitle");
+const bookAuthorInput = document.getElementById("bookAuthor");
+const bookGenreInput = document.getElementById("bookGenre");
+const bookYearInput = document.getElementById("bookYear");
+const bookAvailableCopies = document.getElementById("bookAvailableCopies");
+const bookIdInput = document.getElementById("bookId");
+
 export function handleAddBook(event) {
     document.getElementById('addBookForm').addEventListener('submit', handleAddBook);
 
@@ -192,6 +201,7 @@ function createFetchedBookRow(book) {
           <td>${book.title}</td>
           <td>${book.author}</td>
           <td>${book.year}</td>
+          <td>${book.genre}</td>
           <td>${book.availableCopies}</td>
           <td class="button-table">
               <button data-book-id="${book.id}" class="button-edit" type="submit">Edit</button>
@@ -210,6 +220,101 @@ function attachManageEventHandlers() {
           deleteBook(bookId);
       });
   });
+    const editButtons = document.querySelectorAll('.button-edit');
+    editButtons.forEach(button => {
+        const bookId = button.getAttribute('data-book-id');
+
+        button.addEventListener('click', () => {
+            openEditModal(bookId);
+        });
+    });
+}
+
+async function openEditModal(bookId) {
+    try {
+        const bookDetails = await getBookById(bookId);
+
+        if (bookDetails) {
+            bookTitleInput.value = bookDetails.title || "";
+            bookAuthorInput.value = bookDetails.author || "";
+            bookGenreInput.value = bookDetails.genre || "";
+            bookYearInput.value = bookDetails.year || "";
+            bookAvailableCopies.value = bookDetails.availableCopies || "";
+            bookIdInput.value = bookId;
+            editModal.style.display = "block";
+        } else {
+            console.error(`Book details for ID ${bookId} not found.`);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+function closeEditModal() {
+    editModal.style.display = "none";
+}
+
+function getBookById(bookId) {
+    return fetch(`admin/books/${bookId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Failed to find book");
+            }
+            return response.json();
+        })
+        .catch(error => {
+            console.error("Error fetching book details:", error);
+        });
+}
+
+function handleEditBook(event) {
+    event.preventDefault();
+    const bookId = bookIdInput.value;
+    const updatedBook = {
+        id: bookId,
+        title: bookTitleInput.value,
+        author: bookAuthorInput.value,
+        genre: bookGenreInput.value,
+        year: parseInt(bookYearInput.value),
+        availableCopies: parseInt(bookAvailableCopies.value)
+    };
+
+    editBook(bookId, updatedBook)
+        .then(() => {
+            closeEditModal();
+        })
+        .catch(error => {
+            console.error("Error updating book:", error);
+        });
+}
+
+editForm.addEventListener("submit", (event) => {
+    handleEditBook(event);
+});
+
+const closeModalButton = document.getElementById("closeModalButton");
+
+closeModalButton.addEventListener("click", () => {
+    closeEditModal();
+});
+
+function editBook(bookId, updatedBook) {
+    const { csrfToken, csrfHeader } = getCsrfToken();
+
+    return fetch(`admin/books/${bookId}`, {
+        method: 'PUT',
+        body: JSON.stringify(updatedBook),
+        headers: {
+            [csrfHeader]: csrfToken,
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Failed to update book");
+            }
+            fetchAdminBooks();
+        });
 }
 
 function deleteBook(bookId) {
