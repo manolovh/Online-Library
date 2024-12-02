@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import uni.plovdiv.online_library.dto.PopularBookDto;
 import uni.plovdiv.online_library.dto.TakenBookInfo;
 import uni.plovdiv.online_library.jpa.BookRepository;
@@ -44,7 +45,9 @@ public class BookService {
         throw new RuntimeException("Book not found");
     }
 
+    @Transactional
     public void deleteBook(Long id) {
+        takenBookRepository.deleteAllByBookId(id);
         bookRepository.deleteById(id);
     }
 
